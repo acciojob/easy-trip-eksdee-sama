@@ -68,9 +68,15 @@ public class AirportRepository {
 
     }
 
+
+    public int calculateFlightFare(Integer flightId)
+    {
+        int noOfPeopleBooked = flightToPassengerDatabase.get(flightId).size();
+        return noOfPeopleBooked*50 + 3000;
+    }
     public int getNumberOfPeopleOn(Date date,String airportName)
     {
-        Airport airport = airportDatabase.get(airportName)
+        Airport airport = airportDatabase.get(airportName);
         if(airport==null){
             return 0;
         }
@@ -86,12 +92,6 @@ public class AirportRepository {
         }
         return count;
     }
-    public int calculateFlightFare(Integer flightId)
-    {
-        int noOfPeopleBooked = flightToPassengerDatabase.get(flightId).size();
-        return noOfPeopleBooked*50 + 3000;
-    }
-
     public String bookATicket(Integer flightId,Integer passengerId)
     {
         if(flightToPassengerDatabase.get(flightId)!=null &&(flightToPassengerDatabase.get(flightId).size()< flightDatabase.get(flightId).getMaxCapacity())){
@@ -138,20 +138,6 @@ public class AirportRepository {
         return "FAILURE";
     }
 
-    public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId)
-    {
-        int count = 0;
-        for(Map.Entry<Integer,List<Integer>> entry: flightToPassengerDatabase.entrySet()){
-
-            List<Integer> passengers  = entry.getValue();
-            for(Integer passenger : passengers){
-                if(passenger==passengerId){
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
 
     public String addFlight(Flight flight)
     {
@@ -172,6 +158,21 @@ public class AirportRepository {
         }
         return null;
     }
+    public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId)
+    {
+        int count = 0;
+        for(Map.Entry<Integer,List<Integer>> entry: flightToPassengerDatabase.entrySet()){
+
+            List<Integer> passengers  = entry.getValue();
+            for(Integer passenger : passengers){
+                if(passenger==passengerId){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
 
     public int calculateTotalRevenueOfAFlight(Integer flightId){
 
